@@ -1,0 +1,23 @@
+{% extends "allbikes.html" %}	
+	{% block content %}
+		<h2> Edit Bike </h2>
+
+		<form action="{{url_for('editBikeSpecs', bike_id=bike_id, bike=editedBike )}}" method = 'POST'>
+			<p>Name:</p>
+			<input type='text' size='40' name='name' placeholder = '{{bike.bike_name}}' >
+
+			<p>Description:</p>
+			<input type='text' size='40' name='description' placeholder = '{{bike.description}}' >
+
+			<p>Price:</p>
+			<input type='text' size='40' name='price' placeholder = '{{bike.price}}' >
+
+				<p>Class:</p>
+				<input type="radio" name="bike_class" value="Sport" checked> Sport<br>
+				<input type="radio" name="bike_clas" value="Tourist"> Tourist<br>
+				<input type="radio" name="bike_clas" value="Cruiser"> Cruiser<br>
+
+			<input type='submit' value='Edit'>
+		</form>
+		<a href= "{{url_for('allBikes')}}">Cancel</a>
+	{% endblock %}
