@@ -262,18 +262,46 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-# JSON APIs to view Restaurant Information NEED TO ADD NEW OR REVIEW DB SETUP
 
+# JSON APIs to view Bikes 
+@app.route('/bikes/JSON')
+def allBikesJSON():
+    bikes = session.query(BikeSpecs).all()
+    return jsonify(bikes=[b.serialize for b in bikes])
+
+
+@app.route('/bikes/<string:class_name>/JSON')
+def bikeClassJSON(class_name): 
+    class_name
+    bikes = session.query(BikeSpecs).filter_by(bike_class=class_name).all()
+    return jsonify(bikes=[b.serialize for b in bikes])
+
+#landing page
+@app.route('/')
+@app.route('/index')
+def allClasses():    
+    return render_template('allclasses.html')
+
+
+@app.route('/bikes/<string:bike_class>')
+def selectedClass(bike_class):
+    bikes = session.query(BikeSpecs).filter_by(bike_class=bike_class).all()
+    if 'username' not in login_session:
+        return render_template('publicbikes.html', bikes=bikes)
+    else:
+	author = login_session['user_id']
+        return render_template('selected_class.html', bikes=bikes, author=author) 
+       
 
 # Show all bikes
-@app.route('/')
 @app.route('/bikes')
 def allBikes():
     bikes = session.query(BikeSpecs).order_by(asc(BikeSpecs.bike_name))
     if 'username' not in login_session:
         return render_template('publicbikes.html', bikes=bikes)
     else:
-        return render_template('allbikes.html', bikes=bikes)
+	author = login_session['user_id']
+        return render_template('allbikes.html', bikes=bikes, author=author)
 
 
 # Add a new bike
@@ -282,11 +310,12 @@ def addNewBike():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        newBike = BikeSpecs(bike_name=request.form['bike_name'], user_id=login_session['user_id'], description=request.form['description'], price=request.form['price'], bike_class=request.form['bike_class'])
+	author = login_session['user_id']
+        newBike = BikeSpecs(bike_name=request.form['bike_name'], user_id=author, description=request.form['description'], price=request.form['price'], bike_class=request.form['bike_class'])
         session.add(newBike)
-        flash("New Bike '%s' Successfully Added" % newBike.bike_name)
         session.commit()
-        return redirect(url_for('allBikes'))
+	flash("New Bike '%s' Successfully Added" % newBike.bike_name)
+        return redirect(url_for('allBikes', author=author))
     else:
         return render_template('new_bike.html')
 

@@ -40,34 +40,12 @@
 <a href="{{url_for('allBikes')}}">See all bikes</a>
 
 				<div class="bike_classes">
-						<div><a href="{{url_for('selectedClass', bikeclass='sport')}}">Sport</a></div>
-						<div><a href="{{url_for('selectedClass', bikeclass='tourist')}}">Tourist</a></div>
-						<div><a href="{{url_for('selectedClass', bikeclass='cruiser')}}">Cruiser</a></div>
+						<div><a href="{{url_for('selectedClass', bike_class='sport')}}">Sport</a></div>
+						<div><a href="{{url_for('selectedClass', bike_class='tourist')}}">Tourist</a></div>
+						<div><a href="{{url_for('selectedClass', bike_class='cruiser')}}">Cruiser</a></div>
 				</div>
 
-				{% if not bikes %}
-					<div class='no_restaurant'>
-						<h2>No bikes found.</h2>
-					</div> 
-				{% else %}
-					{% for i in bikes %}
-						<div class = 'restaurant'>
-								<div class = 'rest_name'>
-								<span class = 'name'><p>{{i.bike_name}}</p></span>
-								<span class = 'name'><p>{{i.description}}</p></span>
-
-<span class = 'name'><p>user {{i.user_id}}</p></span>
-								
-							</div>
-							{% if i.user_id == author %}
-							<div class = "edit_delete_pane">
-								<a href="{{url_for('editBikeSpecs', bike_id=i.id)}}">Edit</a>
-								<a href="{{url_for('deleteBike', bike_id=i.id)}}">Delete</a>
-							</div>
-						{% endif %}
-						</div>
-					{% endfor %}			
-				{% endif %}
+				
 			{% endblock %}
 		</div>
 	</body>

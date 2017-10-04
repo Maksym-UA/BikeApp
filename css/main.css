@@ -1,0 +1,249 @@
+body  {
+	align-items: center;
+	display: flex;
+	flex-direction: column;	
+	font-family: 'Bellefair', serif;
+	color: #2d3c49;	
+	font-weight: 300;	
+}
+
+
+header {
+	align-items: center;
+	display: flex;
+	flex-direction: column;	
+	margin-bottom: 5px;	
+}
+
+.flash          { background: #cee5F5; }
+.error          { background: #f0d6d6; padding: 0.5em; }
+h1 {
+	margin-bottom: 10px;	
+}
+
+
+a {
+	text-decoration: none;
+	color: #1a1a1a;
+}
+
+
+hr {
+	color: #7d97ad;	
+	border: 2px solid #7d97ad;
+	margin: 0;
+}
+
+
+a:link, a active, a:hover { 
+	color: #1a1a1a;
+	text-decoration: none;
+}
+
+
+.container {
+	margin: 0px auto;	
+	max-width: 800px;	
+}
+
+
+.navigation {
+	padding: 5px 0px;
+}
+
+
+#logout, #write, #login, #register{
+	display: inline;
+	
+}
+
+
+#write {
+	float: left;
+}
+
+
+#logout, #login, #register {
+	padding-left: 3px;
+	float:right;
+}
+
+
+.newpost + .newpost {
+	margin-top: 20px;
+}
+
+
+.post {
+	display: block;
+	margin: 45px auto 15px auto;
+	padding: 10px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	width: 100%;
+}
+
+.title, .post-body{
+	display: block;
+}
+
+
+.title {
+	border-bottom: 2px solid #999999;
+}
+
+
+.post-subject, .post-created, .like-buttons, .number {
+	display: inline;
+}
+
+
+.post-subject {
+	font-weight: bold;
+}
+
+
+.post-created {
+	float: right;
+	font-size: 14px;
+	color: #808080;
+}
+
+
+.post-body {
+	margin: 15px 0px 5px 0px;
+	font-size: 17px;
+	word-wrap:break-word;
+}
+
+
+.give-likes, .edit-buttons {
+	display: block;
+	margin: 15px 0px 5px 0px;
+	
+}
+
+.like-buttons {
+	float: left;
+}
+
+.likebut a > button {
+	margin-right: 3px;
+}
+
+
+.number {
+	display: block;
+	float:right;
+	margin: 5px 5px;	
+}
+
+.edit-buttons {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	margin: 0px;	
+}
+
+
+.edit-buttons a > button {
+	margin-left: 3px;
+}
+
+
+.comment-post > button {
+	margin-left: 3px;
+}
+
+
+.comment {
+	display: block;
+	margin: 10px 35px; 
+	padding: 15px;
+	box-shadow:0px 0px 7px 3px #cccccc inset;
+}
+
+
+.comment-subject, .comment-created {
+	display: inline;
+}
+
+
+.comment-created {
+	float: right;
+	font-size: 12px;
+	color: #808080;
+}
+
+
+.comment-body {
+	margin-top: 10px;
+	font-size: 14px;
+	word-wrap:break-word;
+}
+
+
+.form {
+	margin: 25px auto;
+	padding: 0;
+}
+
+
+.editcomment {
+	display: block;
+	float: right;
+	margin-right: 15px;
+	
+}
+
+
+.editcomment > button {
+	margin-left: 3px;	
+}
+.error {
+	display: block;
+	font-size: 14px;
+	color: red;
+}
+
+label {
+	display: block;
+	font-size: 20px;
+}
+
+input[type=text], input[type=password] {
+	display: block;
+	font-size: 20px;
+	padding: 2px;
+}
+
+
+input[type=submit], .cancelbut {
+	margin-top: 25px;
+	font-size: 15px;	
+}
+
+textarea {
+	width: 100%;
+	font-size: 15px;
+	font-family: monospace;
+}
+
+button  {
+	display: inline-block;
+	float: right;
+}
+
+a.newpost {
+	float:right;
+}
+
+
+h2 {
+	margin: 5px 0px 25px 0px;
+}
+
+
+.editpostarea {
+	
+	
+}

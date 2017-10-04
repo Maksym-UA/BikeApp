@@ -19,19 +19,19 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 #Bike1
-bike1 = BikeSpecs(bike_name = "Kawasaki Ninja 300", description = "With 296cc of fuel-injected, adrenaline-rush-inducing performance and effortless handling characteristics, the Ninja 300 torches the competition across the", price = "$50",bike_class = "Sport")
+bike1 = BikeSpecs(bike_name = "Kawasaki Ninja 300", description = "With 296cc of fuel-injected, adrenaline-rush-inducing performance and effortless handling characteristics, the Ninja 300 torches the competition across the", price = "$50",bike_class = "cruiser")
 
 session.add(bike1)
 session.commit()
 
 
-bike2 = BikeSpecs(bike_name = "Honda CBR500", description = "If you're looking for a streetbike that is the perfect combination of size, performance, versatility and price, Honda's CBR500R is exactly where you want to be.", price = "$50", bike_class = "Sport")
+bike2 = BikeSpecs(bike_name = "Honda CBR500", description = "If you're looking for a streetbike that is the perfect combination of size, performance, versatility and price, Honda's CBR500R is exactly where you want to be.", price = "$50", bike_class = "sport")
 
 session.add(bike2)
 session.commit()
 
 
-bike3 = BikeSpecs(bike_name = "Honda CBR 125R", description = "It is hard to imagine, but back in 2004 the Honda CBR125R was an absolute sensation. While the likes of the Aprilia RS125 were screaming around the UK's ..", price = "$50",bike_class = "Sport")
+bike3 = BikeSpecs(bike_name = "Honda CBR 125R", description = "It is hard to imagine, but back in 2004 the Honda CBR125R was an absolute sensation. While the likes of the Aprilia RS125 were screaming around the UK's ..", price = "$50",bike_class = "tourist")
 
 session.add(bike3)
 session.commit()

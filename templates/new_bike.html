@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>Bike catalog</title>
 		<link rel=stylesheet href="{{ url_for('static', filename='main2.css') }}">
-	</head
+	</head>
 	
 	<body>
 		<div class = 'pane'>
@@ -24,11 +24,11 @@
 				<input type='text' size='40' name='price'>
 
 				<p>Class:</p>
-				<input type="radio" name="bike_class" value="Sport" checked> Sport<br>
-				<input type="radio" name="bike_clas" value="Tourist"> Tourist<br>
-				<input type="radio" name="bike_clas" value="Cruiser"> Cruiser<br>
+				<input type="radio" name="bike_class" value="sport" > Sport<br>
+				<input type="radio" name="bike_class" value="tourist" checked> Tourist<br>
+				<input type="radio" name="bike_class" value="cruiser"> Cruiser<br>
 				
-				<input type='submit' value='Add new item'>
+				<input type='submit' value='Add new bike'>
 			</form>
 			<a href= "{{url_for('allBikes')}}">Cancel</a>
 		</div>

@@ -45,6 +45,7 @@
 						<div><a href="{{url_for('selectedClass', bikeclass='cruiser')}}">Cruiser</a></div>
 				</div>
 
+
 				{% if not bikes %}
 					<div class='no_restaurant'>
 						<h2>No bikes found.</h2>

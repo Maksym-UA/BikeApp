@@ -40,10 +40,11 @@
 <a href="{{url_for('allBikes')}}">See all bikes</a>
 
 				<div class="bike_classes">
-						<div><a href="{{url_for('selectedClass', bikeclass='sport')}}">Sport</a></div>
-						<div><a href="{{url_for('selectedClass', bikeclass='tourist')}}">Tourist</a></div>
-						<div><a href="{{url_for('selectedClass', bikeclass='cruiser')}}">Cruiser</a></div>
+						<div><a href="{{url_for('selectedClass', bike_class='sport')}}">Sport</a></div>
+						<div><a href="{{url_for('selectedClass', bike_class='tourist')}}">Tourist</a></div>
+						<div><a href="{{url_for('selectedClass', bike_class='cruiser')}}">Cruiser</a></div>
 				</div>
+
 
 				{% if not bikes %}
 					<div class='no_restaurant'>
