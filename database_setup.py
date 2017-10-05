@@ -15,7 +15,6 @@ class User(Base):
     picture = Column(String(250))
 
 
-
 class BikeSpecs(Base):
     __tablename__ = 'bike_specs'
 
@@ -24,9 +23,10 @@ class BikeSpecs(Base):
     description = Column(String(250))
     price = Column(String(8))
     bike_class = Column(String(80))
+    img = Column(String(250))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
-
+    
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""

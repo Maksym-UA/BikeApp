@@ -1,52 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Bike catalog</title>
-		<link rel=stylesheet href="{{ url_for('static', filename='main2.css') }}">
-	</head>
-	
-	<body>
+{% extends "allbikes.html" %}	
+	{% block content %}
+	<div class="bike_classes">
 
-	<div class="row top-menu">
-			<div class="col-md-6">
+		<a href="{{url_for('allBikes')}}"><div class = "col-xs-12 col-sm-6 col-md-6"> <div class="boxes">See all bikes</div></div></a>
+		<a href="{{url_for('selectedClass', selected_class='sport')}}"><div class = "col-xs-12 col-sm-6 col-md-6"> <div class="boxes">Sport</div></div></a>
+		<a href="{{url_for('selectedClass', selected_class='tourist')}}"><div class = "col-xs-12 col-sm-6 col-md-6"> <div class="boxes">Tourist</div></div></a>
+		<a href="{{url_for('selectedClass', selected_class='cruiser')}}"><div class = "col-xs-12 col-sm-6 col-md-6"> <div class="boxes">Cruiser</div></div></a>
+	</div>
 				
-			</div>
-			<div class="col-md-6 text-right">
-							{%if 'username' not in session %}
-					<a href="{{url_for('showLogin')}}">Click Here to Login </a>
-					{% else %}
-					<a href="{{url_for('disconnect')}}">Logout </a>
-					{% endif %}
-		
-			</div>
-		</div>
-		<div class = 'pane'>
-			{% block content %}
-				<a href="{{url_for('addNewBike')}}">Click Here to Add New Bike </a>
+{% endblock %}
 
-			<div class = 'flash'>
-						  {% with messages = get_flashed_messages() %}
-				  {% if messages %}
-					  
-					<ul>
-					{% for message in messages %}
-						<li> <strong> {{ message }} </strong> </li>
-					{% endfor %}
-					</ul>
-					{% endif %}
-				{% endwith %}
-			</div>
-<a href="{{url_for('allBikes')}}">See all bikes</a>
-
-				<div class="bike_classes">
-						<div><a href="{{url_for('selectedClass', bike_class='sport')}}">Sport</a></div>
-						<div><a href="{{url_for('selectedClass', bike_class='tourist')}}">Tourist</a></div>
-						<div><a href="{{url_for('selectedClass', bike_class='cruiser')}}">Cruiser</a></div>
-				</div>
-
-				
-			{% endblock %}
-		</div>
-	</body>
-</html>

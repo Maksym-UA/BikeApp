@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="Bike Catalog"/>
+		<meta name="Maksym" content="//pydega.com">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="mobile-web-app-capable" content="yes">
+
+		<title>Bike catalog</title>
+		
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style8.css')}}">
+		
+		
+
+
 
 	  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
 	   	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"> </script>
@@ -14,9 +29,26 @@
 
 
 	<body>  
+		<div class="container">
+			<header>
+				<div class="col-xs-12 col-sm-12 col-md-12 toppane">
+					<div class="col-xs-2 col-sm-2 col-md-6">						
+					</div>
+					
+					<div class="col-md-6 login">
+						
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 text-center name">						
+					<h2>Bike Catalog</h2>
+				</div>
+			</header>
 
+			<div class = "col-xs-12 col-sm-12 col-md-12 main">
+				
+				<div class = "col-xs-12 col-sm-6 col-md-6  log_Google">
 
-	<!-- GOOGLE PLUS SIGN IN BUTTON-->
+		<!-- GOOGLE PLUS SIGN IN BUTTON-->
 
 		  <!-- data-scope="openid email" - sepcifies what google resources we want to be able to access
 			data-redirecturi="postmessage"- enables the one-time use code flow
@@ -24,6 +56,7 @@
 			data-cookiepolicy="single_host_origin" determines the scope of URIs that can access the cookie 
 		 	data-callback="signInCallback" -if access of out app granted by user, this callback is called and given the one-time use code and access token	
 			data-approvalprompt="force"-user needs to login each time he visits login page-->
+			
 		  <div id="signInButton">
 		  <span class="g-signin"
 		    data-scope="openid email" 
@@ -35,8 +68,7 @@
 		    data-approvalprompt="force"> 
 		  </span>
 		  </div>
-		  <div id="result">
-		  </div>
+		  
 
 		  <script>
 		function signInCallback(authResult) {
@@ -55,7 +87,7 @@
 			if (result) {
 			  $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
 			 setTimeout(function() {
-			  window.location.href = "http://0.0.0.0:5000/bikes";
+			  window.location.href = "/bikes";
 			 }, 4000);
 		      } else if (authResult['error']) {
 		    console.log('There was an error: ' + authResult['error']);
@@ -65,7 +97,9 @@
 		      }
 		  }); } }
 		</script>
+		</div>
 
+		<div class = "col-xs-12 col-sm-6 col-md-6 log_Facebook">
 		
 		<!--FACEBOOK SIGN IN -->
 <script>
@@ -105,7 +139,7 @@
         if (result) {
           $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
          setTimeout(function() {
-          window.location.href = "http://0.0.0.0:5000/bikes";
+          window.location.href = "/bikes";
          }, 4000);
           
       } else {
@@ -119,7 +153,7 @@
 </script>
 
 
-<button>
+<button id="FBbutton">
          
 
           <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
@@ -130,7 +164,10 @@
 
         </button>
 <!--END FACEBOOK SIGN IN -->
-
-
+				</div>
+<div class="col-xs-12 col-sm-12 col-md-12" id="result">
+		  </div>
+				</div>
+			</div>
 		</body>
 	</html>

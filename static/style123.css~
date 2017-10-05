@@ -1,0 +1,223 @@
+
+body { 
+	align-items: center; 
+	display: flex; 
+	font-family: sans-serif; 
+	font-weight: 300;
+	background-color: #f2f2f2;
+}
+
+
+header {
+	align-items: center;
+	display: flex;
+	flex-direction: column;	
+	margin-bottom: 5px;
+	padding: 0px 15px;	
+}
+
+
+.login {
+	padding: 10px 0px 0px 0px;
+	text-align: right;
+}
+
+
+.log_Google, .log_Facebook {			
+	
+	padding: 25px 0px;
+}
+
+.log_Google > div, #signInButton > div, #g-signin, #signInButton, #FBbutton {
+	display: block;
+    margin: auto;
+}
+
+
+.topppane {
+	padding: 0px;
+}
+
+
+.name {
+	padding-top: 10px;
+	border-bottom: 2px solid rgba(50, 153, 187,1);
+}
+
+
+.container {
+	margin: 0px auto;	
+	max-width: 800px;
+	background-color: #ffffff;
+	padding: 0px;	
+	-webkit-box-shadow: 0 6px 20px 0 rgba(0,0,0,0.25);
+	-moz-box-shadow:0 6px 20px 0 rgba(0,0,0,0.25);
+	box-shadow:0 6px 20px 0 rgba(0,0,0,0.25);
+}
+
+row.add {
+	padding: 5px 0px;
+}
+
+#add_bike {
+	ont-size: 1.2em;
+	padding: 10px;
+	color: green;
+}
+
+
+
+
+#add_bike:hover{	
+	background-color:rgba(255, 153, 0, 0.85);
+	-webkit-box-shadow: 0 8px 6px -6px grey;
+	-moz-box-shadow: 0 8px 6px -6px grey;
+	box-shadow: 0 8px 5px -5px grey;
+	color:white;
+	text-decoration:none;
+}
+
+
+.navigation {
+	padding: 10px 0px;
+}
+
+
+#logout, #login{
+	display: inline;
+}
+
+
+row.flash { background: #cee5F5;
+	padding: 0;
+	}
+
+
+.error { 
+	background: #f0d6d6; 
+	padding: 0.5em; 
+}
+
+
+#menu{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	margin: auto;
+	width: 40%;
+	padding-left: 0px;
+	padding-bottom: 15px;
+}
+
+
+#menu li{
+	display:block;
+	padding: 0px 10px 0px 10px;
+	
+	/*-webkit-transition: width 2s; /* Safari */
+    /*transition: height 2s;*/
+    /*transition-delay: 1s;*/
+}
+
+
+#menu li:nth-child(2){
+	border-right: 2px solid #BCBCBC;
+	border-left: 2px solid #BCBCBC;
+}
+
+
+#menu li:nth-child(4){
+	border-left: 2px solid #BCBCBC;
+}
+
+
+.menuItem a{
+	color: #424242;
+	font-size: 1.3em;
+	text-decoration: none;
+	border-bottom: 2px solid rgba(192, 192, 192, 0);
+	-webkit-transition: border 500ms ease;
+  -moz-transition: border 500ms ease;
+  -ms-transition: border 500ms ease;
+  -o-transition: border 500ms ease;
+  transition: border 500ms ease;
+}
+
+.menuItem .active{
+	color: #FF9900;
+	text-decoration: none;
+}
+
+.menuItem .active:hover{border-bottom: 2px solid #FF9900;}
+
+
+
+.menuItem a:hover{
+	text-decoration: none;
+	border-bottom: 2px solid rgba(50,153,187, 1);
+}
+
+
+.row {
+	margin:0px;
+	 padding: 5px;
+}
+
+.row.bike{
+	margin-bottom: 25px;
+	padding: 10px;
+	 -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+       -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+			
+	
+	}
+
+.col-sm-6.bikePic{
+	position: relative;
+	display: inline-block;
+   	text-align:center;
+	vertical-align: middle;
+	
+}
+
+.bikes{
+	position: relative;
+	width:80%;
+	vertical-align: middle;
+}
+
+
+.col-sm-6.data{
+	position: relative;
+	display: inline-block;
+    vertical-align:middle;
+	text-align: left;
+	padding: 0px;
+ }
+
+.bike_name {
+	background-color: rgba(50,153,187, 0.4);
+	font-weight: bold;
+	font-size: 1.3em;
+}
+
+
+.edit_delete_pane {
+	display:block;
+	text-align:center;
+}
+
+.edit {
+padding: 5px 12px;
+
+}
+
+.edit:hover {
+text-decoration: none;
+-webkit-box-shadow: 0 8px 6px -6px grey;
+	-moz-box-shadow: 0 8px 6px -6px grey;
+box-shadow: 0 8px 5px -5px grey;
+}
+
+

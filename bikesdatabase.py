@@ -19,7 +19,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 #Bike1
-bike1 = BikeSpecs(bike_name = "Kawasaki Ninja 300", description = "With 296cc of fuel-injected, adrenaline-rush-inducing performance and effortless handling characteristics, the Ninja 300 torches the competition across the", price = "$50",bike_class = "cruiser")
+bike1 = BikeSpecs(bike_name = "Kawasaki Ninja 300", description = "With 296cc of fuel-injected, adrenaline-rush-inducing performance and effortless handling characteristics, the Ninja 300 torches the competition across the", price = "$50",bike_class = "cruiser", img = "static/img/KawasakiNinja300.png")
 
 session.add(bike1)
 session.commit()

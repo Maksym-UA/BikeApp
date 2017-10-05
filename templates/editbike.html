@@ -1,23 +1,32 @@
 {% extends "allbikes.html" %}	
 	{% block content %}
-		<h2> Edit Bike </h2>
+		<div class="row bike">
+		<h2> Please, edit bike below </h2>
+		
+		<img class="bikes" src={{editedBike.img}} alt={{editedBike.bike_name}}style="width:304px;height:228px;"> 
 
-		<form action="{{url_for('editBikeSpecs', bike_id=bike_id, bike=editedBike )}}" method = 'POST'>
+		<form action="{{url_for('editBikeSpecs', bike_id=bike_id, editedBike=editedBike)}}" method = 'POST'>
 			<p>Name:</p>
-			<input type='text' size='40' name='name' placeholder = '{{bike.bike_name}}' >
+			<input type='text' size='40' name='name' placeholder = '{{editedBike.bike_name}}' >
 
 			<p>Description:</p>
-			<input type='text' size='40' name='description' placeholder = '{{bike.description}}' >
+			<input type='text' size='40' name='description' placeholder = '{{editedBike.description}}' >
 
 			<p>Price:</p>
-			<input type='text' size='40' name='price' placeholder = '{{bike.price}}' >
+			<input type='text' size='40' name='price' placeholder = '{{editedBike.price}}' >
+
+			<p>Image:</p>
+			<input type='text' size='40' name='image' placeholder = '{{editedBike.img}}' >
 
 				<p>Class:</p>
-				<input type="radio" name="bike_class" value="Sport" checked> Sport<br>
+				<input type="radio" name="bike_class" value="Sport" > Sport<br>
 				<input type="radio" name="bike_class" value="Tourist"> Tourist<br>
 				<input type="radio" name="bike_class" value="Cruiser"> Cruiser<br>
 
 			<input type='submit' value='Edit'>
 		</form>
-		<a href= "{{url_for('allBikes')}}">Cancel</a>
+
+		<a id="cancel" href= "{{url_for('allBikes')}}">Cancel</a>
+		
+</div>
 	{% endblock %}

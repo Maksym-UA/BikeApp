@@ -1,0 +1,55 @@
+$(document).ready(function(){
+	
+	
+
+var width = $(window).width();//current
+	
+	
+	//selectors accroding to bike class(tour, sport, cruiser)
+	$('#selectAll').addClass('active');
+	
+	$('#selectAll').click(function(){
+		$('.row.sport, .row.tourist, .row.cruiser').fadeIn();
+		$('#sportSel,#tourSel, #cruiserSel').removeClass('active');
+		$(this).addClass('active');
+	});
+	
+	
+	$('#sportSel').click(function(){
+		$('.row.tourist, .row.cruiser').hide();
+		$('#selectAll, #tourSel, #cruiserSel').removeClass('active');
+		$(this).addClass('active');
+		;
+		
+		$('.row.sport').each(function(){
+			$(this).fadeIn();
+		});
+	});
+	
+	
+	
+	$('#tourSel').click(function(){
+		
+		$('.row.sport, .row.cruiser').hide();
+		$('#selectAll, #sportSel, #cruiserSel').removeClass('active');
+		$(this).addClass('active');
+		$(".row.tourist").each(function(){
+			 $(this).fadeIn();
+		});
+		
+		
+	});
+	
+	$('#cruiserSel').click(function(){
+		$('.row.sport, .row.tourist').hide();
+		$('#selectAll, #sportSel, #tourSel').removeClass('active');
+		$(this).addClass('active');
+		$(".row.cruiser").each(function(){
+			 $(this).fadeIn();
+		});
+		
+	});
+	
+	
+	
+});

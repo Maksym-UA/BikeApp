@@ -1,75 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Bike catalog</title>
-		<link rel=stylesheet href="{{ url_for('static', filename='main2.css') }}">
-	</head>
-	
-	<body>
-
-	<div class="row top-menu">
-			<div class="col-md-6">
+{% extends "allbikes.html" %}	
+	{% block content %}
 				
-			</div>
-			<div class="col-md-6 text-right">
-							{%if 'username' not in session %}
-					<a href="{{url_for('showLogin')}}">Click Here to Login </a>
-					{% else %}
-					<a href="{{url_for('disconnect')}}">Logout </a>
-					{% endif %}
-		
-			</div>
-		</div>
-		<div class = 'pane'>
-			{% block content %}
-				<a href="{{url_for('addNewBike')}}">Click Here to Add New Bike </a>
 
-			<div class = 'flash'>
-						  {% with messages = get_flashed_messages() %}
-				  {% if messages %}
-					  
-					<ul>
-					{% for message in messages %}
-						<li> <strong> {{ message }} </strong> </li>
-					{% endfor %}
-					</ul>
-					{% endif %}
-				{% endwith %}
-			</div>
-<a href="{{url_for('allBikes')}}">See all bikes</a>
-
-				<div class="bike_classes">
-						<div><a href="{{url_for('selectedClass', bike_class='sport')}}">Sport</a></div>
-						<div><a href="{{url_for('selectedClass', bike_class='tourist')}}">Tourist</a></div>
-						<div><a href="{{url_for('selectedClass', bike_class='cruiser')}}">Cruiser</a></div>
+				<div class="row add">
+					<a id="add_bike" href="{{url_for('addNewBike')}}">Click Here to Add New Bike </a>
+				</div>
+				<div class="row" id="bikeSelection">
+							<ul id="menu">
+								<li class="menuItem"><a href="{{url_for('allBikes')}}" id="selectAll">All</a></li>
+								<li class="menuItem"><a href="{{url_for('selectedClass', selected_class='sport')}}" id="sportSel">Sport</a></li>
+								<li class="menuItem"><a href="{{url_for('selectedClass', selected_class='tourist')}}" id="tourSel">Tourist</a></li>
+								<li class="menuItem"><a href="{{url_for('selectedClass', selected_class='cruiser')}}" id="cruiserSel">Cruiser</a></li>
+							</ul>
 				</div>
 
 
 				{% if not bikes %}
-					<div class='no_restaurant'>
+					<div class="row" id="no_bike">
 						<h2>No bikes found.</h2>
 					</div> 
 				{% else %}
 					{% for i in bikes %}
-						<div class = 'restaurant'>
-								<div class = 'rest_name'>
-								<span class = 'name'><p>{{i.bike_name}}</p></span>
-								<span class = 'name'><p>{{i.description}}</p></span>
 
-<span class = 'name'><p>user {{i.user_id}}</p></span>
-								
+					<div class="row bike">
+						<div class="col-sm-6 bikePic">
+							<img class="bikes" src={{i.img}} alt={{i.bike_name}}> 
+						</div>						
+						
+						<div class="col-sm-6 data">
+							<div class = 'bike_specs'>
+								<span ><p class="bike_name">{{i.bike_name}}</p></span>
+								<span ><p>{{i.description}}</p></span>
+								<span ><p>Added by: {{author}}</p></span>
 							</div>
-							{% if i.user_id == author %}
-							<div class = "edit_delete_pane">
-								<a href="{{url_for('editBikeSpecs', bike_id=i.id)}}">Edit</a>
-								<a href="{{url_for('deleteBike', bike_id=i.id)}}">Delete</a>
-							</div>
-						{% endif %}
+							
+							{% if i.user_id == user_id %}
+								<div class = " row edit_delete_pane">
+									<a class="edit" href="{{url_for('editBikeSpecs', bike_id=i.id)}}">Edit</a>
+									<a class="edit" href="{{url_for('deleteBike', bike_id=i.id)}}">Delete</a>
+								</div>
+							{% endif %}
+															
 						</div>
+					</div>
 					{% endfor %}			
 				{% endif %}
 			{% endblock %}
-		</div>
-	</body>
-</html>
+		

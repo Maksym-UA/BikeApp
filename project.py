@@ -282,15 +282,15 @@ def bikeClassJSON(class_name):
 def allClasses():    
     return render_template('allclasses.html')
 
-
-@app.route('/bikes/<string:bike_class>')
-def selectedClass(bike_class):
-    bikes = session.query(BikeSpecs).filter_by(bike_class=bike_class).all()
+#show specific class of the bikes
+@app.route('/bikes/<string:selected_class>')
+def selectedClass(selected_class):
+    bikes = session.query(BikeSpecs).filter_by(bike_class=selected_class).all()
     if 'username' not in login_session:
         return render_template('publicbikes.html', bikes=bikes)
     else:
-	author = login_session['user_id']
-        return render_template('selected_class.html', bikes=bikes, author=author) 
+	author = session.query(User).filter_by(id=login_session['user_id']).one() 
+        return render_template('selected_class.html', bikes=bikes, author=author.name, user_id = author.id) 
        
 
 # Show all bikes
@@ -300,8 +300,8 @@ def allBikes():
     if 'username' not in login_session:
         return render_template('publicbikes.html', bikes=bikes)
     else:
-	author = login_session['user_id']
-        return render_template('allbikes.html', bikes=bikes, author=author)
+	author = session.query(User).filter_by(id=login_session['user_id']).one() 
+        return render_template('allbikes.html', bikes=bikes, author=author.name, user_id = author.id)
 
 
 # Add a new bike
@@ -311,11 +311,11 @@ def addNewBike():
         return redirect('/login')
     if request.method == 'POST':
 	author = login_session['user_id']
-        newBike = BikeSpecs(bike_name=request.form['bike_name'], user_id=author, description=request.form['description'], price=request.form['price'], bike_class=request.form['bike_class'])
+        newBike = BikeSpecs(bike_name=request.form['bike_name'], user_id=author, description=request.form['description'], price=request.form['price'], bike_class=request.form['bike_class'], img=request.form['image'])
         session.add(newBike)
         session.commit()
 	flash("New Bike '%s' Successfully Added" % newBike.bike_name)
-        return redirect(url_for('allBikes', author=author))
+        return redirect(url_for('allBikes'))
     else:
         return render_template('new_bike.html')
 
@@ -336,14 +336,18 @@ def editBikeSpecs(bike_id):
             editedBike.description = request.form['description']
         if request.form['price']:
             editedBike.price = request.form['price']
+	if request.form['image']:
+            editedBike.img = request.form['image']
         if request.form['bike_class']:
             editedBike.bike_class = request.form['bike_class']
         session.add(editedBike)
         session.commit()
         flash('The bike specs successfully edited')
+	
         return redirect(url_for('allBikes'))
     else:
-        return render_template('editbike.html', bike_id=bike_id, bike=editedBike)
+	image = editedBike.img
+        return render_template('editbike.html', bike_id=bike_id, editedBike=editedBike)
 
 
 # Delete a bike
@@ -360,7 +364,7 @@ def deleteBike(bike_id):
         flash('Bike %s Successfully Deleted' %bikeToDelete.bike_name)
         return redirect(url_for('allBikes'))
     else:
-        return render_template('delete_bike.html', bike_id=bike_id, bike=bikeToDelete)
+        return render_template('delete_bike.html', bike_id=bike_id, bikeToDelete = bikeToDelete)
 
 
 # Disconnect based on provider
@@ -380,10 +384,10 @@ def disconnect():
         del login_session['user_id']
         del login_session['provider']
         flash("You have successfully been logged out.")
-        return redirect(url_for('allBikes'))
+        return redirect(url_for('allClasses'))
     else:
         flash("You were not logged in")
-        return redirect(url_for('allBikes'))
+        return redirect(url_for('allClasses'))
 
 
 if __name__ == '__main__':
