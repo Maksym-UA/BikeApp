@@ -19,20 +19,17 @@ Users can view, create, update and delete existing information.
 
 In order to install Flask type in the Terminal:
 
-
 	
     $ pip install Flask
     
-
-	
 
 ### Installinf SQLAlchemy
 
 In order to install SQLAlchemy type in the Terminal:
 
-	```
+	
     $ pip install SQLAlchemy
-    ```
+   
 
 ### Installing VirtualBox
 
@@ -82,6 +79,12 @@ operating system and install it. This may take quite a while (many minutes) depe
 
 - Inside the VM, change directory to `/vagrant/final_project` and look around with `ls`. Any file you create in one will be automatically shared to the other. 
 This means that you can edit code in your favorite text editor, and run it inside the VM. Feel free to look through and edit all the files.
+	
+	```
+    $cd /vagrant/final_project
+    $ ls
+    Vagrantfile  bikesdatabase.py  database_setup.py   project.py  readme.md  pg_config  fb_client_secrets.json  client_secrets.json templates static
+    ```
 
 - Files in the VM's `/vagrant` directory are shared with the `vagrant` folder on your computer. But other data inside the VM is not. 
 
