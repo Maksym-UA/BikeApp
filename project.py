@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, render_template, request, redirect, jsonify
+from flask import url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, BikeSpecs
@@ -25,14 +26,16 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
 # Create anti-forgery state token
-@app.route('/login')# http://0.0.0.0:5000/login
+@app.route('/login')  # http://0.0.0.0:5000/login
 def showLogin():
-	state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-			for x in xrange(32))
-	login_session['state'] = state
-	# return "The current session state is %s" % login_session['state']
-	return render_template('login.html', STATE=state)
+    state = ''.join(
+        random.choice(
+            string.ascii_uppercase + string.digits)for x in xrange(32))
+    login_session['state'] = state
+    # return "The current session state is %s" % login_session['state']
+    return render_template('login.html', STATE=state)
 
 
 @app.route('/fbconnect', methods=['POST'])
@@ -44,29 +47,32 @@ def fbconnect():
     access_token = request.data
     print "access token received %s " % access_token
 
-
     app_id = json.loads(open('fb_client_secrets.json', 'r').read())[
         'web']['app_id']
     app_secret = json.loads(
         open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
-        app_id, app_secret, access_token)
+    url = (
+        "https://graph.facebook.com/oauth/access_token?grant_type=" +
+        "fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s"
+        % (app_id, app_secret, access_token))
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
-
 
     # Use token to get user info from API
     userinfo_url = "https://graph.facebook.com/v2.8/me"
     '''
-        Due to the formatting for the result from the server token exchange we have to
-        split the token first on commas and select the first index which gives us the key : value
-        for the server access token then we split it on colons to pull out the actual token value
-        and replace the remaining quotes with nothing so that it can be used directly in the graph
-        api calls
-    '''
+        Due to the formatting for the result from the server token exchange we
+        have to split the token first on commas and select the first index
+        which gives us the key : value for the server access token then we
+        split it on colons to pull out the actual token value and replace the
+        remaining quotes with nothing so that it can be used directly in
+        the graph api calls
+        '''
     token = result.split(',')[0].split(':')[1].replace('"', '')
 
-    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % token
+    url = (
+        "https://graph.facebook.com/v2.8/me?access_token=%s&fields=" +
+        "name,id,email" % token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     # print "url sent for API access:%s"% url
@@ -81,7 +87,9 @@ def fbconnect():
     login_session['access_token'] = token
 
     # Get user picture
-    url = 'https://graph.facebook.com/v2.8/me/picture?access_token=%s&redirect=0&height=200&width=200' % token
+    url = (
+        "https://graph.facebook.com/v2.8/me/picture?access_token=%s&" +
+        "redirect=0&height=200&width=200" % token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
@@ -101,11 +109,12 @@ def fbconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 150px; height: 150px;border-radius: 75px;-webkit-border-radius: 75px;-moz-border-radius: 75px;"> '
+    output += (
+        ' " style = "width: 150px; height: 150px;border-radius: 75px;' +
+        '-webkit-border-radius: 75px;-moz-border-radius: 75px;"> ')
 
     flash("Now logged in as %s" % login_session['username'])
     return output
-
 
 
 @app.route('/fbdisconnect')
@@ -113,7 +122,9 @@ def fbdisconnect():
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
+    url = (
+        'https://graph.facebook.com/%s/permissions?access_token=%s'
+        % (facebook_id, access_token))
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
     return "you have been logged out"
@@ -171,8 +182,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -205,7 +216,9 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 150px; height: 150px;border-radius: 75px;-webkit-border-radius: 75px;-moz-border-radius: 75px;"> '
+    output += (
+        ' " style = "width: 150px; height: 150px;border-radius: 75px;' +
+        '-webkit-border-radius: 75px;-moz-border-radius: 75px;"> ')
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -236,6 +249,7 @@ def getUserID(email):
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
 
+
 @app.route('/gdisconnect')
 def gdisconnect():
     # Only disconnect a connected user.
@@ -251,19 +265,20 @@ def gdisconnect():
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
-        #del login_session['username']
-        #del login_session['email']
-        #del login_session['picture']
+        #  del login_session['username']
+        #  del login_session['email']
+        #  del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
 
 
-# JSON APIs to view Bikes 
+# JSON APIs to view Bikes
 @app.route('/bikes/JSON')
 def allBikesJSON():
     bikes = session.query(BikeSpecs).all()
@@ -271,27 +286,32 @@ def allBikesJSON():
 
 
 @app.route('/bikes/<string:class_name>/JSON')
-def bikeClassJSON(class_name): 
+def bikeClassJSON(class_name):
     class_name
     bikes = session.query(BikeSpecs).filter_by(bike_class=class_name).all()
     return jsonify(bikes=[b.serialize for b in bikes])
 
-#landing page
+
+#  landing page
 @app.route('/')
 @app.route('/index')
-def allClasses():    
+def allClasses():
     return render_template('allclasses.html')
 
-#show specific class of the bikes
+
+#  show specific class of the bikes
 @app.route('/bikes/<string:selected_class>')
 def selectedClass(selected_class):
     bikes = session.query(BikeSpecs).filter_by(bike_class=selected_class).all()
     if 'username' not in login_session:
         return render_template('publicbikes.html', bikes=bikes)
     else:
-	author = session.query(User).filter_by(id=login_session['user_id']).one() 
-        return render_template('selected_class.html', bikes=bikes, author=author.name, user_id = author.id) 
-       
+        author = session.query(
+            User).filter_by(id=login_session['user_id']).one()
+        return render_template(
+            'selected_class.html', bikes=bikes, author=author.name,
+            user_id=author.id)
+
 
 # Show all bikes
 @app.route('/bikes')
@@ -300,8 +320,11 @@ def allBikes():
     if 'username' not in login_session:
         return render_template('publicbikes.html', bikes=bikes)
     else:
-	author = session.query(User).filter_by(id=login_session['user_id']).one() 
-        return render_template('allbikes.html', bikes=bikes, author=author.name, user_id = author.id)
+        author = session.query(
+            User).filter_by(id=login_session['user_id']).one()
+        return render_template(
+            'allbikes.html', bikes=bikes, author=author.name,
+            user_id=author.id)
 
 
 # Add a new bike
@@ -310,11 +333,15 @@ def addNewBike():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-	author = login_session['user_id']
-        newBike = BikeSpecs(bike_name=request.form['bike_name'], user_id=author, description=request.form['description'], price=request.form['price'], bike_class=request.form['bike_class'], img=request.form['image'])
+        author = login_session['user_id']
+        newBike = BikeSpecs(
+            bike_name=request.form['bike_name'], user_id=author,
+            description=request.form['description'],
+            price=request.form['price'], bike_class=request.form['bike_class'],
+            img=request.form['image'])
         session.add(newBike)
         session.commit()
-	flash("New Bike '%s' Successfully Added" % newBike.bike_name)
+        flash("New Bike '%s' Successfully Added" % newBike.bike_name)
         return redirect(url_for('allBikes'))
     else:
         return render_template('new_bike.html')
@@ -328,7 +355,10 @@ def editBikeSpecs(bike_id):
     if 'username' not in login_session:
         return redirect('/login')
     if editedBike.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized to edit this bike's specs. Please add a new bike in order to edit.');}</script><body onload='myFunction()''>"
+        return (
+            "<script>function myFunction() {alert('You are not authorized" +
+            "to edit this bike's specs. Please add a new bike in order to" +
+            "edit.');}</script><body onload='myFunction()''>")
     if request.method == 'POST':
         if request.form['name']:
             editedBike.bike_name = request.form['name']
@@ -336,18 +366,18 @@ def editBikeSpecs(bike_id):
             editedBike.description = request.form['description']
         if request.form['price']:
             editedBike.price = request.form['price']
-	if request.form['image']:
+        if request.form['image']:
             editedBike.img = request.form['image']
         if request.form['bike_class']:
             editedBike.bike_class = request.form['bike_class']
         session.add(editedBike)
         session.commit()
         flash('The bike specs successfully edited')
-	
         return redirect(url_for('allBikes'))
     else:
-	image = editedBike.img
-        return render_template('editbike.html', bike_id=bike_id, editedBike=editedBike)
+        image = editedBike.img
+        return render_template(
+            'editbike.html', bike_id=bike_id, editedBike=editedBike)
 
 
 # Delete a bike
@@ -357,14 +387,18 @@ def deleteBike(bike_id):
         return redirect('/login')
     bikeToDelete = session.query(BikeSpecs).filter_by(id=bike_id).one()
     if login_session['user_id'] != bikeToDelete.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to delete this bike. Please add your own bike in order to delete later.');}</script><body onload='myFunction()''>"
+        return (
+            "<script>function myFunction() {alert('You are not authorized" +
+            "to delete this bike. Please add your own bike in order to " +
+            "delete later.');}</script><body onload='myFunction()''>")
     if request.method == 'POST':
         session.delete(bikeToDelete)
         session.commit()
-        flash('Bike %s Successfully Deleted' %bikeToDelete.bike_name)
+        flash('Bike %s Successfully Deleted' % bikeToDelete.bike_name)
         return redirect(url_for('allBikes'))
     else:
-        return render_template('delete_bike.html', bike_id=bike_id, bikeToDelete = bikeToDelete)
+        return render_template(
+            'delete_bike.html', bike_id=bike_id, bikeToDelete=bikeToDelete)
 
 
 # Disconnect based on provider
@@ -373,8 +407,8 @@ def disconnect():
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
             gdisconnect()
-            #del login_session['gplus_id']
-            #del login_session['credentials']
+            # del login_session['gplus_id']
+            # del login_session['credentials']
         if login_session['provider'] == 'facebook':
             fbdisconnect()
             del login_session['facebook_id']
@@ -394,5 +428,4 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
-
 

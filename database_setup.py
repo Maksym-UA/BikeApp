@@ -26,7 +26,7 @@ class BikeSpecs(Base):
     img = Column(String(250))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
-    
+
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
@@ -35,11 +35,10 @@ class BikeSpecs(Base):
             'description': self.description,
             'id': self.id,
             'class': self.bike_class,
-            'price': self.price,            
+            'price': self.price,
         }
-
 
 engine = create_engine('sqlite:///motorbikes.db')
 
-
 Base.metadata.create_all(engine)
+
