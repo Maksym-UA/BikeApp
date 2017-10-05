@@ -2,7 +2,7 @@
 
 ## Flask Application
 
-This project uses [SQLAlchemy] (http://www.sqlalchemy.org/) (the Python SQL toolkit) and [Flask] (http://flask.pocoo.org/)
+This project uses [SQLAlchemy](http://www.sqlalchemy.org/) (the Python SQL toolkit) and [Flask](http://flask.pocoo.org/)
 (a microframework for Python based on Werkzeug, Jinja 2) to create and maintain database ov various bikes. 
 Users can view, create, update and delete existing information. 
 
