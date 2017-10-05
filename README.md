@@ -18,17 +18,19 @@ Users can view, create, update and delete existing information.
 ### Installing Flask
 
 In order to install Flask type in the Terminal:
+
 	```
-	$ pip install Flask
-	```
+    $ pip install Flask
+    ```
+	
 
 ### Installinf SQLAlchemy
 
 In order to install SQLAlchemy type in the Terminal:
 
 	```
-	pip install SQLAlchemy
-	```
+    $ pip install SQLAlchemy
+    ```
 
 ### Installing VirtualBox
 
@@ -94,7 +96,7 @@ This means that you can edit code in your favorite text editor, and run it insid
 	This will either setuo empty database or add bikes to the data accordingly.
 	
 
-- When you are ready to run the app, simply type in `/vagrant/final_project` directory:
+- When you are ready to run the app, simply type in `/vagrant/final_project` directory at the shell prompt:
 
 	```
     $ python project.py
