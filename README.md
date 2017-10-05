@@ -19,6 +19,11 @@ Users can view, create, update and delete existing information.
 
 In order to install Flask type in the Terminal:
 
+
+	```
+    $ pip install Flask
+    ```
+
 	```
     $ pip install Flask
     ```
