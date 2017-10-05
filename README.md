@@ -83,7 +83,7 @@ This means that you can edit code in your favorite text editor, and run it insid
 	```
     $cd /vagrant/final_project
     $ ls
-    Vagrantfile  bikesdatabase.py  database_setup.py   project.py  readme.md  pg_config  fb_client_secrets.json  client_secrets.json templates static
+    bikesdatabase.py  database_setup.py   project.py  readme.md  pg_config  fb_client_secrets.json  client_secrets.json templates static
     ```
 
 - Files in the VM's `/vagrant` directory are shared with the `vagrant` folder on your computer. But other data inside the VM is not. 
