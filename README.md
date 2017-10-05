@@ -3,7 +3,8 @@
 ## Flask Application
 
 This project uses [SQLAlchemy](http://www.sqlalchemy.org/) (the Python SQL toolkit) and [Flask](http://flask.pocoo.org/)
-(a microframework for Python based on Werkzeug, Jinja 2) to create and maintain database ov various bikes. 
+(a microframework for Python based on [Werkzeug](http://werkzeug.pocoo.org/), [Jinja 2](http://jinja.pocoo.org/docs/2.9/))
+to create and maintain database ov various bikes. 
 Users can view, create, update and delete existing information. 
 
   
@@ -11,7 +12,23 @@ Users can view, create, update and delete existing information.
 
 - You'll need to use a virtual machine (VM) to run an SQL database server and a web app that uses it. 
 - You'll need to use Vagrant and VirtualBox to install and manage the VM. 
-- You'll need to install Flask which will already have all the tools for buidling the app.
+- You'll need to install Flask and SQLAlchemy which will have all the tools for buidling the web app.
+
+
+### Installing Flask
+
+In order to install Flask type in the Terminal:
+	```
+	$ pip install Flask
+	```
+
+### Installinf SQLAlchemy
+
+In order to install SQLAlchemy type in the Terminal:
+
+	```
+	pip install SQLAlchemy
+	```
 
 ### Installing VirtualBox
 
@@ -60,7 +77,7 @@ operating system and install it. This may take quite a while (many minutes) depe
     ```
 
 - Inside the VM, change directory to `/vagrant/final_project` and look around with `ls`. Any file you create in one will be automatically shared to the other. 
-This means that you can edit code in your favorite text editor, and run it inside the VM.
+This means that you can edit code in your favorite text editor, and run it inside the VM. Feel free to look through and edit all the files.
 
 - Files in the VM's `/vagrant` directory are shared with the `vagrant` folder on your computer. But other data inside the VM is not. 
 
@@ -76,27 +93,22 @@ This means that you can edit code in your favorite text editor, and run it insid
     ```
 	This will either setuo empty database or add bikes to the data accordingly.
 	
-### Logging out and in
+
+- When you are ready to run the app, simply type in `/vagrant/final_project` directory:
+
+	```
+    $ python project.py
+    ```	
+This will run the app on the specified address. At this very setup the app will run on `http://0.0.0.0:5000/login`. Now you can navigate through the app.
+
+- To close connection you can simply type `exit` (or `Ctrl-C`) at the shell prompt.
+	
+	
+	### Logging in and out from Vagrant
 If you type `exit` (or `Ctrl-D`) at the shell prompt inside the VM, you will be logged out, and put back into your host computer's shell. To log back in, make sure you're 
 in the same directory and type `vagrant ssh` again.
 
 If you reboot your computer, you will need to run `vagrant up` to restart the VM.
-
-
-### Installing Flask
-
-In order to install Flask type in the Terminal
-	```
-	$ pip install Flask
-	```
-
-### Installinf SQLAlchemy
-
-In order to install Flask type in the Terminal
-
-	```
-	pip install SQLAlchemy
-	```
 
 
 
