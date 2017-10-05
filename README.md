@@ -10,7 +10,8 @@ Users can view, create, update and delete existing information.
 ## SETUP
 
 - You'll need to use a virtual machine (VM) to run an SQL database server and a web app that uses it. 
-- You'll need to user Vagrant and VirtualBox to install and manage the VM. 
+- You'll need to use Vagrant and VirtualBox to install and manage the VM. 
+- You'll need to install Flask which will already have all the tools for buidling the app.
 
 ### Installing VirtualBox
 
@@ -58,22 +59,23 @@ operating system and install it. This may take quite a while (many minutes) depe
     $ vagrant ssh
     ```
 
-- Inside the VM, change directory to `/vagrant` and look around with `ls`. Any file you create in one will be automatically shared to the other. 
+- Inside the VM, change directory to `/vagrant/final_project` and look around with `ls`. Any file you create in one will be automatically shared to the other. 
 This means that you can edit code in your favorite text editor, and run it inside the VM.
 
 - Files in the VM's `/vagrant` directory are shared with the `vagrant` folder on your computer. But other data inside the VM is not. 
-For instance, the PostgreSQL database itself lives only inside the VM.
 
+- You can edit database_setup.py or bikesdatabase.py in any editor you prefer. When you finish simply run
 
-### Creating Your Database
-
-- Before you can run the code or create tables, you'll need to use the create database command in `psql` to create the database. Use the name tournament for your database.
-Then you can connect psql to your new database and create your tables from the statements you've written in tournament.sql. 
-
-Use the command `\i tournament.sql` to import the whole file into psql at once. 
-Remember, if you get your database into a bad state you can always `drop` tables or the whole database to clear it out.
-
-
+	```
+    $ python database_setup.py
+    ```
+	or
+	
+	```
+    $ python bikesdatabase.py
+    ```
+	This will either setuo empty database or add bikes to the data accordingly.
+	
 ### Logging out and in
 If you type `exit` (or `Ctrl-D`) at the shell prompt inside the VM, you will be logged out, and put back into your host computer's shell. To log back in, make sure you're 
 in the same directory and type `vagrant ssh` again.
@@ -81,16 +83,21 @@ in the same directory and type `vagrant ssh` again.
 If you reboot your computer, you will need to run `vagrant up` to restart the VM.
 
 
-### Running the database
+### Installing Flask
 
-The PostgreSQL database server will automatically be started inside the VM. You can use the `psql` command-line tool to access it and run SQL statements. Run `\c tournament` to connect to the database.
+In order to install Flask type in the Terminal
+	```
+	$ pip install Flask
+	```
 
-    ```
-    vagrant@vagrant:/vagrant/tournament$ psql
-    vagrant=> \c tournament
-    You are now connected to database "tournament" as user "vagrant".
-    tournament=>
-    ```
+### Installinf SQLAlchemy
+
+In order to install Flask type in the Terminal
+
+	```
+	pip install SQLAlchemy
+	```
+
 
 
 ### That's it you are ready to go! Feel free to make any changes to the provided code.
@@ -101,4 +108,3 @@ The PostgreSQL database server will automatically be started inside the VM. You 
 Please send you feedback to
 
   max.savin3@gmail.com
-
