@@ -1,5 +1,7 @@
+#  show specific class of the bikes
 from flask import Flask, render_template, request, redirect, jsonify
 from flask import url_for, flash
+from functools import wraps
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, BikeSpecs
@@ -38,6 +40,7 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+# Authorization via Facebook profile
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
     if request.args.get('state') != login_session['state']:
@@ -130,6 +133,7 @@ def fbdisconnect():
     return "you have been logged out"
 
 
+# Authorization via Google profile
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -247,6 +251,19 @@ def getUserID(email):
     except:
         return None
 
+
+#  login decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash('Please, log in to your account')
+            return redirect('/publicbikes')
+    return decorated_function
+
+
 # DISCONNECT - Revoke a current user's token and reset their login_session
 
 
@@ -278,18 +295,26 @@ def gdisconnect():
         return response
 
 
-# JSON APIs to view Bikes
+# JSON API to view all bikes
 @app.route('/bikes/JSON')
 def allBikesJSON():
     bikes = session.query(BikeSpecs).all()
     return jsonify(bikes=[b.serialize for b in bikes])
 
 
+# JSON API to view bikes of specific class
 @app.route('/bikes/<string:class_name>/JSON')
 def bikeClassJSON(class_name):
     class_name
     bikes = session.query(BikeSpecs).filter_by(bike_class=class_name).all()
     return jsonify(bikes=[b.serialize for b in bikes])
+
+
+# JSON API to view specific bikes
+@app.route('/bikes/<int:bike_id>/JSON')
+def singleBikeJSON(bike_id):
+    bike = session.query(BikeSpecs).filter_by(id=bike_id).one()
+    return jsonify(bike=[bike.serialize])
 
 
 #  landing page
@@ -299,39 +324,41 @@ def allClasses():
     return render_template('allclasses.html')
 
 
-#  show specific class of the bikes
+#  Show bikes of specific class
 @app.route('/bikes/<string:selected_class>')
+@login_required
 def selectedClass(selected_class):
     bikes = session.query(BikeSpecs).filter_by(bike_class=selected_class).all()
-    if 'username' not in login_session:
-        return render_template('publicbikes.html', bikes=bikes)
-    else:
-        author = session.query(
-            User).filter_by(id=login_session['user_id']).one()
-        return render_template(
-            'selected_class.html', bikes=bikes, author=author.name,
-            user_id=author.id)
+    author = session.query(
+        User).filter_by(id=login_session['user_id']).one()
+    return render_template(
+        'selected_class.html', bikes=bikes, author=author.name,
+        user_id=author.id)
+
+
+# Show bikes when logged out
+@app.route('/publicbikes')
+def publicBikes():
+    bikes = session.query(BikeSpecs).all()
+    return render_template('publicbikes.html', bikes=bikes)
 
 
 # Show all bikes
 @app.route('/bikes')
+@login_required
 def allBikes():
     bikes = session.query(BikeSpecs).order_by(asc(BikeSpecs.bike_name))
-    if 'username' not in login_session:
-        return render_template('publicbikes.html', bikes=bikes)
-    else:
-        author = session.query(
+    author = session.query(
             User).filter_by(id=login_session['user_id']).one()
-        return render_template(
+    return render_template(
             'allbikes.html', bikes=bikes, author=author.name,
             user_id=author.id)
 
 
 # Add a new bike
 @app.route('/bikes/new/', methods=['GET', 'POST'])
+@login_required
 def addNewBike():
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         author = login_session['user_id']
         newBike = BikeSpecs(
@@ -349,11 +376,11 @@ def addNewBike():
 
 # Edit bike specs
 @app.route('/bikes/<int:bike_id>/edit/', methods=['GET', 'POST'])
+@login_required
 def editBikeSpecs(bike_id):
     editedBike = session.query(
         BikeSpecs).filter_by(id=bike_id).one()
-    if 'username' not in login_session:
-        return redirect('/login')
+
     if editedBike.user_id != login_session['user_id']:
         return (
             "<script>function myFunction() {alert('You are not authorized" +
@@ -382,9 +409,8 @@ def editBikeSpecs(bike_id):
 
 # Delete a bike
 @app.route('/bikes/<int:bike_id>/delete', methods=['GET', 'POST'])
+@login_required
 def deleteBike(bike_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     bikeToDelete = session.query(BikeSpecs).filter_by(id=bike_id).one()
     if login_session['user_id'] != bikeToDelete.user_id:
         return (
