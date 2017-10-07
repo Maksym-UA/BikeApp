@@ -29,9 +29,12 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-# Create anti-forgery state token
-@app.route('/login')  # http://0.0.0.0:5000/login
+@app.route('/login')
 def showLogin():
+    '''
+    Create anti-forgery state token so every session is unique.
+    The rendered page will be available on http://0.0.0.0:5000/login
+    '''
     state = ''.join(
         random.choice(
             string.ascii_uppercase + string.digits)for x in xrange(32))
@@ -40,15 +43,19 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-# Authorization via Facebook profile
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
+    '''
+    Function for user authorization via Facebook profile. This way you
+    do not need register and store user data. When authorized, user will
+    be able to add, edit and delete new bikes.
+    '''
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
     access_token = request.data
-    print "access token received %s " % access_token
+    # print "access token received %s " % access_token
 
     app_id = json.loads(open('fb_client_secrets.json', 'r').read())[
         'web']['app_id']
@@ -122,6 +129,9 @@ def fbconnect():
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
+    '''
+    Log out user's Facebook profile.
+    '''
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
@@ -133,10 +143,13 @@ def fbdisconnect():
     return "you have been logged out"
 
 
-# Authorization via Google profile
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
-    # Validate state token
+    '''
+    Function for user authorization via Google profile. This way you
+    do not need register and store user data. When authorized, user will
+    be able to add, edit and delete new bikes.
+    '''
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -224,7 +237,7 @@ def gconnect():
         ' " style = "width: 150px; height: 150px;border-radius: 75px;' +
         '-webkit-border-radius: 75px;-moz-border-radius: 75px;"> ')
     flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
+    # print "done!"
     return output
 
 
@@ -252,8 +265,10 @@ def getUserID(email):
         return None
 
 
-#  login decorator
 def login_required(f):
+    '''
+    Login decorator to verify user before enabling editing functionality.
+    '''
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'username' in login_session:
@@ -264,12 +279,12 @@ def login_required(f):
     return decorated_function
 
 
-# DISCONNECT - Revoke a current user's token and reset their login_session
-
-
 @app.route('/gdisconnect')
 def gdisconnect():
-    # Only disconnect a connected user.
+    '''
+    Revoke a current user's token and reset their login session.
+    Only disconnect a connected user.
+    '''
     access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(
@@ -295,39 +310,56 @@ def gdisconnect():
         return response
 
 
-# JSON API to view all bikes
+# JSON API
 @app.route('/bikes/JSON')
 def allBikesJSON():
+    """
+    Return JSON representation of all bikes records in the database.
+    """
     bikes = session.query(BikeSpecs).all()
     return jsonify(bikes=[b.serialize for b in bikes])
 
 
-# JSON API to view bikes of specific class
 @app.route('/bikes/<string:class_name>/JSON')
 def bikeClassJSON(class_name):
+    """
+    Return JSON representation of bikes records of the specific class.
+    """
     class_name
     bikes = session.query(BikeSpecs).filter_by(bike_class=class_name).all()
     return jsonify(bikes=[b.serialize for b in bikes])
 
 
-# JSON API to view specific bikes
 @app.route('/bikes/<int:bike_id>/JSON')
 def singleBikeJSON(bike_id):
-    bike = session.query(BikeSpecs).filter_by(id=bike_id).one()
+    '''
+    Retrieve information of a single bike of the catalog.
+    Return at most one result or raise an exception.
+    Returns None if the query selects no rows.
+    Raises sqlalchemy.orm.exc.MultipleResultsFound if multiple object
+    identities are returned, or if multiple rows are returned for a query
+    that returns only scalar values as opposed to full identity-mapped
+    entities.
+    '''
+    bike = session.query(BikeSpecs).filter_by(id=bike_id).one_or_none()
     return jsonify(bike=[bike.serialize])
 
 
-#  landing page
 @app.route('/')
 @app.route('/index')
 def allClasses():
+    '''
+    Render page with all the classes of bikes available in the database.
+    '''
     return render_template('allclasses.html')
 
 
-#  Show bikes of specific class
 @app.route('/bikes/<string:selected_class>')
 @login_required
 def selectedClass(selected_class):
+    '''
+    Query and retrieve all bikes of the specific class.
+    '''
     bikes = session.query(BikeSpecs).filter_by(bike_class=selected_class).all()
     author = session.query(
         User).filter_by(id=login_session['user_id']).one()
@@ -336,17 +368,22 @@ def selectedClass(selected_class):
         user_id=author.id)
 
 
-# Show bikes when logged out
 @app.route('/publicbikes')
 def publicBikes():
+    '''
+    Show bikes when user is logged out. No ability for visitors edit data.
+    '''
     bikes = session.query(BikeSpecs).all()
     return render_template('publicbikes.html', bikes=bikes)
 
 
-# Show all bikes
 @app.route('/bikes')
 @login_required
 def allBikes():
+    '''
+    Fetch all the saved bikes with their specification, including
+    the person who added it to the database.
+    '''
     bikes = session.query(BikeSpecs).order_by(asc(BikeSpecs.bike_name))
     author = session.query(
             User).filter_by(id=login_session['user_id']).one()
@@ -355,10 +392,12 @@ def allBikes():
             user_id=author.id)
 
 
-# Add a new bike
 @app.route('/bikes/new/', methods=['GET', 'POST'])
 @login_required
 def addNewBike():
+    '''
+    Add a new bike when the user passed authorization.
+    '''
     if request.method == 'POST':
         author = login_session['user_id']
         newBike = BikeSpecs(
@@ -374,12 +413,14 @@ def addNewBike():
         return render_template('new_bike.html')
 
 
-# Edit bike specs
 @app.route('/bikes/<int:bike_id>/edit/', methods=['GET', 'POST'])
 @login_required
 def editBikeSpecs(bike_id):
+    '''
+    Authorized users can edit specs of the bikes they added to the database.
+    '''
     editedBike = session.query(
-        BikeSpecs).filter_by(id=bike_id).one()
+        BikeSpecs).filter_by(id=bike_id).one_or_none()
 
     if editedBike.user_id != login_session['user_id']:
         return (
@@ -407,11 +448,13 @@ def editBikeSpecs(bike_id):
             'editbike.html', bike_id=bike_id, editedBike=editedBike)
 
 
-# Delete a bike
 @app.route('/bikes/<int:bike_id>/delete', methods=['GET', 'POST'])
 @login_required
 def deleteBike(bike_id):
-    bikeToDelete = session.query(BikeSpecs).filter_by(id=bike_id).one()
+    '''
+    Authorized users can delete the bikes they added to the database.
+    '''
+    bikeToDelete = session.query(BikeSpecs).filter_by(id=bike_id).one_or_none()
     if login_session['user_id'] != bikeToDelete.user_id:
         return (
             "<script>function myFunction() {alert('You are not authorized" +
@@ -427,9 +470,12 @@ def deleteBike(bike_id):
             'delete_bike.html', bike_id=bike_id, bikeToDelete=bikeToDelete)
 
 
-# Disconnect based on provider
 @app.route('/disconnect')
 def disconnect():
+    '''
+    Function to disconnect from the session based on provider used when
+    authorizing. Clear user data from the session.
+    '''
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
             gdisconnect()
@@ -454,4 +500,3 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
-
